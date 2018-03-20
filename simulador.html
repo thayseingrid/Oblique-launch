@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.container .btn {
+        position: absolute;
+        top: 85%;
+        left: 10%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        background-color: #b3ffb3;
+        color: black;
+        font-size: 12px;
+        padding: 8px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        text-aling: center;
+}
+
+.container -btn:hover {
+        background-color: black;
+        color: white;
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="900" height="600" style="border:1px solid #000000;"> </canvas>
+
+<div class="container">
+  <img src="./snow.jpeg" style="display: none" id="foo">
+  <img src="bola_neve.svg" style="display: none" id="bol">
+  <button onclick="animar()" class="btn">Clique para iniciar a animação</button>
+  <p id="info"></p>
+  <input type="text" id="vx">
+  <input type="text" id="vy">
+  <button onclick="velocidade()">vx</button>
+  <button onclick="velocidade()">vy</button>
+</div>
+
+<script>
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+var info = document.getElementById('info');
+var start = new Date();
+var flag = true;
+var flag2 = false;
+
+function velocidade() {
+	r.vx = lerCampo("vx");
+	r.vy = lerCampo("vy");
+}
+
+function lerCampo(id) {
+	return parseFloat(document.getElementById(id).value);
+}
+
+var r = {
+  x: 40,
+  y: 500 - 20 - 1,
+  t: 20,
+  t2: 10,
+  vx: 0,
+  vy: 0,
+  ax: 0,
+  ay: 0.002722 * 10
+};
+
+function desenhar() {
+  ctx.clearRect(0, 0, 800, 600);
+  var img1 = document.getElementById("foo");
+  var img2 = document.getElementById("bol");
+  var img3 = document.getElementById("bol");
+  ctx.drawImage(img1, 0, 0, 900, 600);
+
+  if (r.vx != 0 && r.vy != 0) {  
+    ctx.drawImage(img2, r.x, r.y, r.t, r.t);
+  }
+
+  if (flag2 == false && r.vx == 0 && r.vy == 0) {
+    ctx.drawImage(img3, r.x, 500, r.t, r.t2);
+  }
+
+  if (flag) {
+    var p = new Date();
+    info.innerHTML = "" + (p - start) + " ms";
+  }
+
+}
+
+window.onload = function() {
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d");
+}
+
+function checar_lancamento() {
+  if (r.vx != 0 || r.vy != 0) {
+    flag2 = true;
+  }
+}
+
+function animar() {
+  desenhar();
+  atualizar();
+  checar_lancamento();
+  window.requestAnimationFrame(animar);
+}
+
+function atualizar() {
+  r.vx = r.vx + r.ax;
+  r.vy = r.vy + r.ay;
+  r.x = r.x + r.vx;
+  r.y = r.y + r.vy;
+
+  if (r.x < 0) {
+    r.x = 0;
+    r.vx = -r.vx;
+  }
+
+  if (r.x + r.t > 800) {
+    r.x = 799 - r.t;
+    r.vx = -r.vx;
+  }
+
+  if (r.y < 0) {
+    r.y = 0;
+    r.vy = -r.vy;
+    flag = false;
+  }
+
+  if (r.y + r.t > 500) {
+    r.ay = 0;
+    r.ax = 0;
+    r.vx = 0;
+    r.vy = 0;
+  }
+}
+
+desenhar();
+
+</script>
+</body>
+</html>
+
