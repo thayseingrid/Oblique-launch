@@ -1,3 +1,10 @@
+var SET_CANNON = 0;
+var WAIT_INPUT = 1;
+var FIRE = 2;
+var CREATE_SCENARIO = 3;
+var CHECK_RESULTS = 4;
+
+
 function Ball() {
     this.x = 50;
     this.y = 415;
@@ -66,7 +73,9 @@ function Simulator(id) {
     this.cannonBaseFrontImage = document.getElementById('cannonBaseFront');
     this.cannonBaseBackImage = document.getElementById('cannonBaseBack');
     this.ballImage = document.getElementById('ball');
-    this.elements = [new Ball(), new Target()];
+    this.state = CREATE_SCENARIO;
+    this.ball = new Ball();
+    this.target = new Target();
 
     this.fitWindow = function() {
         this.width = window.innerWidth;
@@ -83,7 +92,6 @@ function Simulator(id) {
         var front = this.cannonBaseFrontImage;
         var back = this.cannonBaseBackImage;
         var ball = this.ballImage;
-        this.angle -= 0.5;
 
         var w = 70;
         
@@ -97,7 +105,7 @@ function Simulator(id) {
         h = w * r;
         this.ctx.save();
         this.ctx.translate(60, 420); //40 400
-        this.ctx.rotate(this.angle*Math.PI/180);
+        this.ctx.rotate(-this.angle*Math.PI/180);
         this.ctx.drawImage(body, -20, -20, w, h);
         this.ctx.restore();
         
@@ -108,26 +116,103 @@ function Simulator(id) {
     }
 
     this.draw = function() {
-        this.ctx.clearRect(0, 0, this.width, this.height);
-        var img1 = document.getElementById("foo");
-        this.ctx.drawImage(img1, 0, 0, 900, 600);
-
-        for (var i = 0; i < this.elements.length; ++i) {
-            this.elements[i].draw(this.ctx);
-        }
-
+        this.clearScenario();
+        this.drawBackground();
+        this.drawTarget();
+        this.drawBall();
         this.drawCannon();
     }
 
+    this.drawScenario = function() {
+        this.clearScenario();
+        this.drawBackground();
+        this.drawTarget();
+        this.drawCannon();
+    }
+
+    this.drawBall = function() {
+        this.ball.draw(this.ctx);
+    }
+
+    this.clearScenario = function() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+    }
+
+    this.drawBackground = function() {
+        var img1 = document.getElementById("foo");
+        this.ctx.drawImage(img1, 0, 0, 900, 600);
+    }
+
+    this.drawTarget = function() {
+        this.target.draw(this.ctx);
+    }
+
     this.simulate = function() {
-        this.draw();
-        this.update();
+        console.log(this.state);
+        switch (this.state) {
+        case CREATE_SCENARIO:
+            this.createScenario();
+            break;
+
+        case WAIT_INPUT:
+            this.drawScenario();
+            this.readInputs();
+            break;
+
+        case SET_CANNON:
+            this.drawScenario();
+            this.setCannon();
+            break;
+
+        case FIRE:
+            this.draw();
+            this.update();
+
+            if (this.ball.x > 900) {
+                this.state = CHECK_RESULTS;
+            }
+
+            break;
+
+        case CHECK_RESULTS:
+            this.draw();
+            break;
+        }
+    }
+
+    this.createScenario = function() {
+        this.target = new Target();
+        this.ball = new Ball();
+        this.elements = [this.target];
+        this.state = WAIT_INPUT;
+    }
+
+    this.readInputs = function() {
+        this.ball.vx = lerCampo('vx');
+        this.ball.vy = -lerCampo('vy');
+    }
+
+    this.setCannon = function() {
+        var targetAngle = Math.atan(this.ball.vy / this.ball.vx);
+        targetAngle = -(targetAngle * 180) / Math.PI;
+        this.angle += 0.5;
+
+        if (this.angle > targetAngle) {
+            this.state = FIRE;
+        }
     }
 
     this.update = function() {
-        for (var i = 0; i < this.elements.length; ++i) {
-            this.elements[i].update();
-        }
+        this.ball.update();
+        this.target.update();
+    }
+
+    this.startSimulation = function() {
+        this.state = SET_CANNON;
+    }
+
+    this.resetSimulation = function() {
+        this.state = CREATE_SCENARIO;
     }
 }
 
@@ -140,6 +225,10 @@ var sim = new Simulator('myCanvas');
 function simulate() {
     sim.simulate();
     window.requestAnimationFrame(simulate);
+}
+
+function startSimulation() {
+    sim.startSimulation();
 }
 
 simulate();
