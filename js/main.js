@@ -9,6 +9,7 @@ function Ball() {
     this.x = 50;
     this.y = 415;
     this.size = 20;
+    this.radius = 10;
     this.vx = 1;
     this.vy = -5;
     this.ax = 0;
@@ -30,6 +31,11 @@ function Ball() {
         ctx.rotate(this.angle * Math.PI / 180.0);
         //ctx.drawImage(ball, this.x - v, this.y - v, this.size, this.size);
         ctx.drawImage(ball, 0, 0, this.size, this.size);
+
+        ctx.beginPath();
+        ctx.arc(10, 10, 15, 0, 2 * Math.PI);
+        ctx.stroke();
+
         ctx.restore();
     }
 }
@@ -38,6 +44,7 @@ function Target() {
     this.x = Math.random() * 500 + 200;
     this.y = Math.random() * 300;
     this.size = 30;
+    this.radius = 17;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0;
@@ -58,6 +65,10 @@ function Target() {
         var r = h / w;
         w = 35;
         ctx.drawImage(img, this.x, this.y, w, w * r);
+
+        ctx.beginPath();
+        ctx.arc(this.x + 18, this.y + 22, 17, 0, 2 * Math.PI);
+        ctx.stroke();
     }
 }
 
@@ -148,7 +159,6 @@ function Simulator(id) {
     }
 
     this.simulate = function() {
-        console.log(this.state);
         switch (this.state) {
         case CREATE_SCENARIO:
             this.createScenario();
@@ -167,6 +177,7 @@ function Simulator(id) {
         case FIRE:
             this.draw();
             this.update();
+            this.checkCollision();
 
             if (this.ball.x > 900) {
                 this.state = CHECK_RESULTS;
@@ -213,6 +224,17 @@ function Simulator(id) {
 
     this.resetSimulation = function() {
         this.state = CREATE_SCENARIO;
+    }
+
+    this.checkCollision = function() {
+        x = (this.ball.x + 10) - (this.target.x + 18);
+        y = (this.ball.y + 10) - (this.target.y + 22);
+
+        dist = Math.sqrt(x * x + y * y);
+
+        if (dist < this.ball.radius + this.target.radius) {
+            console.log('atingiu');
+        } 
     }
 }
 
