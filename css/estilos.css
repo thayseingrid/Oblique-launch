@@ -1,0 +1,78 @@
+/*.drawArea {
+    border: 1px solid #000;
+    width: 100vw;
+    height: 100vh;
+}*/
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.simulator {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: #111;
+}
+
+.simulator-draw-area {
+    margin-right: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.simulator-control-area {
+    background-color: #f1f1f1;
+    position: absolute;
+    width: 400px;
+    height: 100vh;
+    top: 0;
+    right: 0;
+}
+
+.title {
+    font-family: 'Pangolin', cursive;
+    font-size: 40px;
+    text-align: center;
+    color: #333;
+}
+
+.main-title {
+    font-family: 'Pangolin', cursive;
+    font-size: 70px;
+    margin-top: 0;
+    text-align: center;
+    color: #f1f1f1;
+}
+
+.entrada {
+    border: none;
+    border-bottom: 1px solid #333;
+    display: block;
+    background-color: rgba(0, 0, 0 ,0);
+    margin: 30px;
+    width: 80%;
+}
+
+.check {
+    width: 20px;
+    padding: 5px;
+}
+
+.botao {
+    background-color: #eff24d;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #d1d343;
+    font-family: 'Pangolin', cursive;
+    font-size: 20px;
+    transition: all 0.7s;
+    color: #333;
+}
+
+.botao:hover {
+    background-color: #f6f918;
+}

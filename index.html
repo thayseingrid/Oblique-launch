@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="css/estilos.css">
+        <link href="https://fonts.googleapis.com/css?family=Pangolin" rel="stylesheet">
+    </head>
+
+    <body>
+        <img src="img/balao.png" style="display: none" id="balloon">
+        <img src="img/bola-neve.png" style="display: none" id="ball">
+        <img src="img/background.jpg" style="display: none" id="foo">
+        <img src="img/canhao-corpo.png" style="display: none" id="cannonBody">
+        <img src="img/canhao-base-tras.png" style="display: none" id="cannonBaseBack">
+        <img src="img/canhao-base-frente.png" style="display: none" id="cannonBaseFront">
+
+        <div class="simulator">
+            <div class="simulator-draw-area">
+                <div>
+                    <h1 class="main-title">Simulador de Lançamentos</h1>
+                    <canvas id="myCanvas" width="900" height="600" class="drawArea"></canvas>
+                </div>
+            </div>
+            <div class="simulator-control-area">
+                <h1 class="title">Comandos</h1>
+                <input type="text" class="entrada" id="vx" placeholder="Vx">
+                <input type="text" class="entrada" id="vy" placeholder="Vy">
+                <input type="checkbox" class="check">Visualizar Sistema de Coordenadas<br>
+                <input type="checkbox" class="check">Exibir Vetores<br>
+                <div style="text-align: center">
+                    <button class="botao">Iniciar Simulação</button>
+                </div>
+                <h1 class="title">Informações do Alvo</h1>
+                <p>Coordenada no eixo x: 5m</p>
+                <p>Coordenada no eixo y: 7m</p>
+                <p>Velocidade no eixo x: 3m</p>
+                <p>Velocidade no eixo y: 1m</p>
+            </div>
+        </div>
+
+        <script src="js/main.js"></script>
+    </body>
+</html>
+
